@@ -1,0 +1,12 @@
+{"properties": [
+  {
+    "name": "api.url.authorization",
+    "type": "java.lang.String",
+    "description": "Authorizes transfer between users"
+  },
+  {
+    "name": "api.url.notify",
+    "type": "java.lang.String",
+    "description": "Notifies user when a transfer is done"
+  }
+]}
