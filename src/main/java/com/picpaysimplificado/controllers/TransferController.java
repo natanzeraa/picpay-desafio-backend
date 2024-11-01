@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.picpaysimplificado.domain.entities.Transfer;
-import com.picpaysimplificado.dtos.TransferDTO;
+import com.picpaysimplificado.records.TransferRecord;
 import com.picpaysimplificado.services.TransferService;
 
 import jakarta.validation.Valid;
@@ -21,7 +21,7 @@ public class TransferController {
 	TransferService transferService;
 
 	@PostMapping
-	public ResponseEntity<Transfer> createNewTransfer(@RequestBody @Valid TransferDTO transfer) {
+	public ResponseEntity<Transfer> createNewTransfer(@RequestBody @Valid TransferRecord transfer) {
 		return ResponseEntity.status(HttpStatus.CREATED).body(transferService.createTransfer(transfer));
 	}
 }

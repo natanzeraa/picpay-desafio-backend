@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.picpaysimplificado.domain.entities.User;
-import com.picpaysimplificado.dtos.UserDTO;
+import com.picpaysimplificado.records.UserRecord;
 import com.picpaysimplificado.services.UserService;
 
 import jakarta.validation.Valid;
@@ -25,7 +25,7 @@ public class UserController {
 	UserService userService;
 
 	@PostMapping
-	public ResponseEntity<User> createNewUser(@RequestBody @Valid UserDTO user) {
+	public ResponseEntity<User> createNewUser(@RequestBody @Valid UserRecord user) {
 		return ResponseEntity.status(HttpStatus.CREATED).body(userService.createUser(user));
 	}
 
