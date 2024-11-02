@@ -3,9 +3,7 @@ package com.picpaysimplificado.services;
 import java.math.BigDecimal;
 import java.util.List;
 
-import org.springframework.beans.BeanUtils;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.picpaysimplificado.domain.entities.User;
@@ -16,31 +14,19 @@ import com.picpaysimplificado.repositories.UserRepository;
 @Service
 public class UserService {
 
+	@Autowired
 	UserRepository userRepository;
 
-	UserService(UserRepository userRepository) {
-		this.userRepository = userRepository;
+	public List<User> findAllUsers() {
+		return userRepository.findAll();
 	}
 
-	public void validateTransfer(User sender, BigDecimal ammount) {
-
-		if (sender.getUserType().toString() == "MERCHANT") {
-			throw new RuntimeException("Merchants cannot send transfers");
-		}
-
-		if (sender.getBalance().compareTo(ammount) <= 0) {
-			throw new RuntimeException("Not enought balance");
-		}
-
+	public User findUserById(Integer id) throws Exception {
+		return userRepository.findById(id).orElseThrow(() -> new Exception("User not found"));
 	}
 
 	public User createUser(UserRecord user) {
-		if (userRepository.existsByEmail(user.email()) || userRepository.existsByDocument(user.document())) {
-			// Handle it as exceptions in a future
-//			return ResponseEntity.status(HttpStatus.CONFLICT).body("User already exists");
-			throw new RuntimeException("User email or document already exists");
-		}
-
+		
 		User newUser = new User();
 
 		newUser.setName(user.name());
@@ -53,16 +39,17 @@ public class UserService {
 		return userRepository.save(newUser);
 	}
 
+	public void validateTransfer(User sender, BigDecimal ammount) throws Exception {
+
+		if (sender.getUserType().toString() == "MERCHANT")
+			throw new Exception("Merchants cannot send transfers");
+
+		if (sender.getBalance().compareTo(ammount) <= 0)
+			throw new Exception("Not enought balance");
+	}
+
 	public void saveUser(User user) {
 		userRepository.save(user);
-	}
-
-	public List<User> findAllUsers() {
-		return userRepository.findAll();
-	}
-
-	public User findUserById(Integer id) {
-		return userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
 	}
 
 }
