@@ -21,7 +21,7 @@ public class TransferController {
 	TransferService transferService;
 
 	@PostMapping
-	public ResponseEntity<Transfer> createNewTransfer(@RequestBody @Valid TransferRecord transfer) {
+	public ResponseEntity<Transfer> createNewTransfer(@RequestBody @Valid TransferRecord transfer) throws Exception {
 		return ResponseEntity.status(HttpStatus.CREATED).body(transferService.createTransfer(transfer));
 	}
 }

@@ -30,7 +30,7 @@ public class UserController {
 	}
 
 	@GetMapping
-	public ResponseEntity<List<User>> findAllUsers() {
+	public ResponseEntity<List<User>> findAllUsers() throws Exception {
 		return ResponseEntity.status(HttpStatus.OK).body(userService.findAllUsers());
 	}
 }
