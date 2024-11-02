@@ -30,21 +30,20 @@ public class TransferService {
 	NotificationService notificationService;
 
 	@Transactional
-	public Transfer createTransfer(TransferRecord transfer) {
+	public Transfer createTransfer(TransferRecord transfer) throws Exception {
 
-		User sender = userRepository.findById(transfer.sender())
-				.orElseThrow(() -> new RuntimeException("Sender not found"));
+		User sender = userRepository.findById(transfer.sender()).orElseThrow(() -> new Exception("Sender not found"));
 
 		User receiver = userRepository.findById(transfer.receiver())
-				.orElseThrow(() -> new RuntimeException("Receiver not found"));
+				.orElseThrow(() -> new Exception("Receiver not found"));
 
 		if (transfer.sender() == transfer.receiver())
-			throw new RuntimeException("Unauthorized");
+			throw new Exception("Operation not permitted");
 
 		boolean authorized = authorizationService.authorizeTransfer(sender, transfer.amount());
 
 		if (!authorized)
-			throw new RuntimeException("Transfer not authorized, try again later.");
+			throw new Exception("Transfer not authorized, try again later.");
 
 		userService.validateTransfer(sender, transfer.amount());
 
