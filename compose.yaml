@@ -12,6 +12,12 @@ services:
       - picpay-network
     volumes:
       - db_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
 
   phpmyadmin:
     depends_on:
@@ -19,10 +25,26 @@ services:
     image: phpmyadmin
     restart: always
     ports:
-      - "8090:80"
+      - '8090:80'
     environment:
       PMA_HOST: mysql
       MYSQL_ROOT_PASSWORD: admin
+    networks:
+      - picpay-network
+ 
+  springboot:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      mysql:
+        condition: service_healthy
+    ports:
+      - '8080:8080'
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql:3306/picpay-database?useSSL=false&allowPublicKeyRetrieval=true
+      - SPRING_DATASOURCE_USERNAME=admin
+      - SPRING_DATASOURCE_PASSWORD=admin
     networks:
       - picpay-network
 
